@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -8,6 +9,8 @@ public class PlayerController : MonoBehaviour
     private Rigidbody rb;
     [SerializeField] private float speed = 2000f;
     [SerializeField] private float horizontalSpeed = 500f;
+    [SerializeField] private TextMeshProUGUI scoretext;
+    private float score = 0f;
 
     private void Awake()
     {
@@ -27,7 +30,7 @@ public class PlayerController : MonoBehaviour
     }
     void Update()
     {
-        
+        ScoreIncrement();
     }
 
     private void EndlessPlayerForwardMovement()
@@ -49,9 +52,20 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Obstacle"))
+        if (collision.gameObject.CompareTag("Obstacle")|| collision.gameObject.CompareTag("Below Ground"))
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            Invoke("RestartLevel", 0.5f);
         }
+    }
+
+    private  void RestartLevel()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    private void ScoreIncrement()
+    {
+        score += Time.deltaTime * 5f;
+        scoretext.text = "Score: " + Mathf.FloorToInt(score);
     }
 }
