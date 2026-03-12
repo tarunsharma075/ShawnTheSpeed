@@ -5,6 +5,8 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     private Rigidbody rb;
+    [SerializeField] private float speed = 2000f;
+    [SerializeField] private float horizontalSpeed = 500f;
 
     private void Awake()
     {
@@ -18,7 +20,8 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        PlayerMovement();
+        EndlessPlayerForwardMovement();
+        PlayerInpurControl();
 
     }
     void Update()
@@ -26,8 +29,20 @@ public class PlayerController : MonoBehaviour
         
     }
 
-    private void PlayerMovement()
+    private void EndlessPlayerForwardMovement()
     {
-        rb.AddForce(0, 0, 2000 * Time.deltaTime);
+        rb.AddForce(0, 0, speed * Time.deltaTime);
+    }
+
+    private void PlayerInpurControl()
+    {
+        if (Input.GetKey(KeyCode.LeftArrow)|| Input.GetKey(KeyCode.A)){
+
+            rb.AddForce(-horizontalSpeed * Time.deltaTime, 0, 0);
+        }else if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
+        {
+
+            rb.AddForce(horizontalSpeed * Time.deltaTime, 0, 0);
+        }
     }
 }
